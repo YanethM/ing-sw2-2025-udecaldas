@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procesos de Desarrollo de Software</title>
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2980b9;
+        --accent-color: #e74c3c;
+        --light-bg: #f5f7fa;
+        --dark-text: #2c3e50;
+        --light-text: #ecf0f1;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-text);
+        background-color: var(--light-bg);
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: var(--light-text);
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 0;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+        margin: 2rem 0 1rem;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        margin: 1.5rem 0 1rem;
+        color: var(--secondary-color);
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      ul,
+      ol {
+        margin: 1rem 0 1rem 2rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .modelo-img {
+        display: block;
+        width: 100%;
+        max-width: 600px;
+        margin: 1rem auto;
+        height: 300px;
+        background-color: #eee;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+      }
+
+      .ventajas-desventajas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .ventajas,
+      .desventajas {
+        flex: 1;
+        min-width: 300px;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+
+      .ventajas {
+        background-color: rgba(46, 204, 113, 0.1);
+        border-left: 4px solid #2ecc71;
+      }
+
+      .desventajas {
+        background-color: rgba(231, 76, 60, 0.1);
+        border-left: 4px solid #e74c3c;
+      }
+
+      .tag {
+        display: inline-block;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      nav {
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        font-weight: 500;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background-color: var(--light-bg);
+        color: var(--primary-color);
+      }
+
+      .hero-text {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer {
+        background-color: var(--dark-text);
+        color: var(--light-text);
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 2rem;
+      }
+
+      .comparacion {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+      }
+
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .fase {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .fase-icono {
+        flex: 0 0 80px;
+        height: 80px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1.5rem;
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      .fase-contenido {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          padding: 1rem 0;
+        }
+
+        .nav-links {
+          margin-top: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .fase-icono {
+          margin-bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-container">
+        <div class="logo">
+          <h3>ProcesosDevSoftware</h3>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#introduccion">Introducción</a></li>
+          <li><a href="#modelos">Modelos</a></li>
+          <li><a href="#actividades">Actividades</a></li>
+          <li><a href="#comparativa">Comparativa</a></li>
+          <li><a href="#mejores-practicas">Mejores Prácticas</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header>
+      <div class="container">
+        <div class="hero-text">
+          <h1>Procesos de Desarrollo de Software</h1>
+          <p>
+            Una guía completa sobre metodologías, enfoques y mejores prácticas
+            para el desarrollo de software exitoso
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="introduccion">
+        <h2>Introducción a los Procesos de Software</h2>
+        <p>
+          Los procesos de software son conjuntos estructurados de actividades,
+          métodos, prácticas y transformaciones que las personas emplean para
+          desarrollar y mantener software y productos asociados. Estos procesos
+          proporcionan un marco de trabajo para gestionar y controlar los
+          proyectos de software.
+        </p>
+
+        <div class="card">
+          <h3>¿Por qué son importantes los procesos de software?</h3>
+          <p>Un proceso de software bien definido y ejecutado:</p>
+          <ul>
+            <li>Proporciona consistencia y repetibilidad en el desarrollo</li>
+            <li>Mejora la calidad del producto final</li>
+            <li>Facilita la planificación y estimación de recursos</li>
+            <li>Ayuda a gestionar la complejidad de los proyectos</li>
+            <li>Reduce riesgos y aumenta la previsibilidad</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="modelos">
+        <h2>Principales Modelos de Procesos de Software</h2>
+        <p>
+          A lo largo de la historia del desarrollo de software, han surgido
+          diversos modelos para abordar los desafíos específicos de cada época y
+          tipo de proyecto. Cada modelo tiene sus propias fortalezas y
+          debilidades.
+        </p>
+
+        <div class="card">
+          <h3>Modelo en Cascada (Waterfall)</h3>
+          <div class="modelo-img">
+            Imagen representativa del modelo en cascada
+          </div>
+          <p>
+            El modelo en cascada es uno de los enfoques más antiguos y
+            tradicionales. Propone un desarrollo secuencial donde cada fase debe
+            completarse antes de iniciar la siguiente.
+          </p>
+
+          <div class="fase">
+            <div class="fase-icono">1</div>
+            <div class="fase-contenido">
+              <h4>Requisitos</h4>
+              <p>
+                Captura y documentación de todos los requisitos del sistema.
+              </p>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">2</div>
+            <div class="fase-contenido">
+              <h4>Diseño</h4>
+              <p>Creación de la arquitectura y diseño detallado del sistema.</p>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">3</div>
+            <div class="fase-contenido">
+              <h4>Implementación</h4>
+              <p>
+                Codificación del software según las especificaciones de diseño.
+              </p>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">4</div>
+            <div class="fase-contenido">
+              <h4>Verificación</h4>
+              <p>
+                Pruebas exhaustivas para asegurar que el software cumple con los
+                requisitos.
+              </p>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">5</div>
+            <div class="fase-contenido">
+              <h4>Mantenimiento</h4>
+              <p>
+                Corrección de errores y actualización del software en
+                producción.
+              </p>
+            </div>
+          </div>
+
+          <div class="ventajas-desventajas">
+            <div class="ventajas">
+              <h4>Ventajas</h4>
+              <ul>
+                <li>Estructura clara y fácil de entender</li>
+                <li>Fases y entregables bien definidos</li>
+                <li>Facilita la planificación y asignación de recursos</li>
+                <li>Ideal para proyectos con requisitos estables</li>
+              </ul>
+            </div>
+            <div class="desventajas">
+              <h4>Desventajas</h4>
+              <ul>
+                <li>Poca flexibilidad para adaptarse a cambios</li>
+                <li>Resultados visibles solo en etapas tardías</li>
+                <li>Difícil retroceder a fases anteriores</li>
+                <li>Riesgo de descubrir problemas tarde en el proceso</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Modelo Iterativo e Incremental</h3>
+          <div class="modelo-img">
+            Imagen representativa del modelo iterativo e incremental
+          </div>
+          <p>
+            Este enfoque divide el desarrollo en ciclos (iteraciones) que añaden
+            funcionalidad progresivamente al software (incrementos). Cada
+            iteración incluye planificación, análisis, diseño, codificación,
+            pruebas y evaluación.
+          </p>
+
+          <p>
+            Ejemplos importantes incluyen el Rational Unified Process (RUP) y
+            varios modelos de desarrollo evolutivo.
+          </p>
+
+          <div class="ventajas-desventajas">
+            <div class="ventajas">
+              <h4>Ventajas</h4>
+              <ul>
+                <li>Permite adaptación a requisitos cambiantes</li>
+                <li>Facilita detección temprana de problemas</li>
+                <li>Entrega valor de forma incremental</li>
+                <li>Menor riesgo de fracaso del proyecto completo</li>
+              </ul>
+            </div>
+            <div class="desventajas">
+              <h4>Desventajas</h4>
+              <ul>
+                <li>Requiere buena planificación y gestión</li>
+                <li>
+                  Puede ser difícil determinar el alcance de cada iteración
+                </li>
+                <li>Potencial complejidad en integración de incrementos</li>
+                <li>Posible ineficiencia por refactorización continua</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Metodologías Ágiles</h3>
+          <div class="modelo-img">
+            Imagen representativa de metodologías ágiles
+          </div>
+          <p>
+            Las metodologías ágiles surgieron como respuesta a las limitaciones
+            de los procesos tradicionales. Se basan en el
+            <strong>Manifiesto Ágil</strong> que valora:
+          </p>
+          <ul>
+            <li>Individuos e interacciones sobre procesos y herramientas</li>
+            <li>Software funcionando sobre documentación exhaustiva</li>
+            <li>Colaboración con el cliente sobre negociación contractual</li>
+            <li>Respuesta ante el cambio sobre seguir un plan</li>
+          </ul>
+
+          <h4>Principales metodologías ágiles:</h4>
+
+          <div class="fase">
+            <div class="fase-icono">S</div>
+            <div class="fase-contenido">
+              <h4>Scrum</h4>
+              <p>
+                Marco de trabajo para gestión de proyectos complejos que
+                organiza el trabajo en sprints (iteraciones de 2-4 semanas) y
+                define roles específicos: Scrum Master, Product Owner y Equipo
+                de Desarrollo.
+              </p>
+              <div>
+                <span class="tag">Sprints</span>
+                <span class="tag">Product Backlog</span>
+                <span class="tag">Daily Standup</span>
+                <span class="tag">Retrospectivas</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">K</div>
+            <div class="fase-contenido">
+              <h4>Kanban</h4>
+              <p>
+                Sistema visual para gestionar el trabajo que enfatiza la entrega
+                continua sin sobrecargar al equipo. Se basa en visualizar el
+                flujo de trabajo, limitar el trabajo en progreso y medir el
+                tiempo de ciclo.
+              </p>
+              <div>
+                <span class="tag">Tablero visual</span>
+                <span class="tag">WIP Limits</span>
+                <span class="tag">Flujo continuo</span>
+                <span class="tag">Pull system</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fase">
+            <div class="fase-icono">XP</div>
+            <div class="fase-contenido">
+              <h4>Extreme Programming (XP)</h4>
+              <p>
+                Metodología centrada en prácticas de ingeniería que mejoran la
+                calidad del software y la capacidad de respuesta a requisitos
+                cambiantes.
+              </p>
+              <div>
+                <span class="tag">Programación en parejas</span>
+                <span class="tag">TDD</span>
+                <span class="tag">Integración continua</span>
+                <span class="tag">Refactorización</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ventajas-desventajas">
+            <div class="ventajas">
+              <h4>Ventajas</h4>
+              <ul>
+                <li>Alta adaptabilidad a cambios</li>
+                <li>Entregas frecuentes de valor</li>
+                <li>Mayor satisfacción del cliente</li>
+                <li>Mejor colaboración en equipo</li>
+                <li>Retroalimentación constante</li>
+              </ul>
+            </div>
+            <div class="desventajas">
+              <h4>Desventajas</h4>
+              <ul>
+                <li>Puede carecer de documentación suficiente</li>
+                <li>Requiere cliente comprometido y disponible</li>
+                <li>Difícil de escalar en proyectos muy grandes</li>
+                <li>Mayor presión sobre los miembros del equipo</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>DevOps</h3>
+          <div class="modelo-img">Imagen representativa del enfoque DevOps</div>
+          <p>
+            DevOps es un conjunto de prácticas que combina el desarrollo de
+            software (Dev) y las operaciones de TI (Ops) con el objetivo de
+            acortar el ciclo de vida del desarrollo y proporcionar entrega
+            continua con alta calidad.
+          </p>
+
+          <h4>Principios clave de DevOps:</h4>
+          <ul>
+            <li>Automatización de procesos (CI/CD)</li>
+            <li>Colaboración y comunicación entre equipos</li>
+            <li>Medición continua y monitorización</li>
+            <li>Infraestructura como código</li>
+            <li>Despliegue frecuente de cambios pequeños</li>
+          </ul>
+
+          <div class="ventajas-desventajas">
+            <div class="ventajas">
+              <h4>Ventajas</h4>
+              <ul>
+                <li>Entrega más rápida de funcionalidades</li>
+                <li>Mayor estabilidad de los entornos</li>
+                <li>Respuesta más ágil a problemas</li>
+                <li>Mejor uso de recursos</li>
+              </ul>
+            </div>
+            <div class="desventajas">
+              <h4>Desventajas</h4>
+              <ul>
+                <li>Requiere cambio cultural significativo</li>
+                <li>Inversión inicial en herramientas y formación</li>
+                <li>Potenciales desafíos de seguridad</li>
+                <li>Complejidad en la implementación inicial</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="actividades">
+        <h2>Actividades Principales en los Procesos de Software</h2>
+        <p>
+          Independientemente del modelo o metodología elegida, existen
+          actividades fundamentales que están presentes en prácticamente todos
+          los procesos de desarrollo de software.
+        </p>
+
+        <div class="card">
+          <h3>1. Especificación</h3>
+          <p>
+            La fase de especificación define qué debe hacer el sistema y las
+            restricciones en su operación.
+          </p>
+          <ul>
+            <li>
+              <strong>Ingeniería de requisitos:</strong> Captura, análisis,
+              especificación y validación de requisitos
+            </li>
+            <li>
+              <strong>Estudios de viabilidad:</strong> Evaluación técnica y
+              económica del proyecto
+            </li>
+            <li>
+              <strong>Modelado del negocio:</strong> Comprensión del contexto
+              del sistema
+            </li>
+          </ul>
+          <p>
+            En metodologías ágiles, la especificación suele documentarse como
+            historias de usuario, casos de uso o product backlog.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Diseño e Implementación</h3>
+          <p>
+            Esta actividad se centra en convertir la especificación en un
+            sistema ejecutable.
+          </p>
+          <ul>
+            <li>
+              <strong>Diseño arquitectónico:</strong> Estructura general del
+              sistema
+            </li>
+            <li>
+              <strong>Diseño detallado:</strong> Componentes, interfaces y
+              algoritmos
+            </li>
+            <li><strong>Implementación:</strong> Codificación según diseños</li>
+            <li>
+              <strong>Integración:</strong> Combinación de componentes para
+              formar subsistemas
+            </li>
+          </ul>
+          <p>
+            Las prácticas modernas incluyen desarrollo guiado por pruebas (TDD),
+            programación en parejas y refactorización continua.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>3. Validación y Verificación</h3>
+          <p>
+            Estas actividades aseguran que el software cumple con su
+            especificación y satisface las necesidades del cliente.
+          </p>
+          <ul>
+            <li>
+              <strong>Pruebas unitarias:</strong> Verificación de componentes
+              individuales
+            </li>
+            <li>
+              <strong>Pruebas de integración:</strong> Verificación de
+              interacciones entre componentes
+            </li>
+            <li>
+              <strong>Pruebas del sistema:</strong> Validación del sistema
+              completo
+            </li>
+            <li>
+              <strong>Pruebas de aceptación:</strong> Validación con el cliente
+            </li>
+            <li>
+              <strong>Revisiones de código:</strong> Inspección manual por pares
+            </li>
+          </ul>
+          <p>
+            La automatización de pruebas es una práctica esencial en procesos
+            modernos.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>4. Evolución</h3>
+          <p>
+            El software rara vez es estático; debe evolucionar para adaptarse a
+            necesidades cambiantes.
+          </p>
+          <ul>
+            <li>
+              <strong>Mantenimiento correctivo:</strong> Resolver defectos
+            </li>
+            <li>
+              <strong>Mantenimiento adaptativo:</strong> Adaptación a cambios en
+              el entorno
+            </li>
+            <li>
+              <strong>Mantenimiento perfectivo:</strong> Mejora de
+              funcionalidades existentes
+            </li>
+            <li>
+              <strong>Mantenimiento preventivo:</strong> Mejora de
+              sostenibilidad a largo plazo
+            </li>
+          </ul>
+          <p>
+            La evolución representa típicamente el 60-80% del costo total del
+            software a lo largo de su vida útil.
+          </p>
+        </div>
+      </section>
+
+      <section id="comparativa">
+        <h2>Comparativa de Procesos de Software</h2>
+        <p>
+          La elección del proceso adecuado depende de varios factores como la
+          naturaleza del proyecto, las restricciones, el equipo y la
+          organización.
+        </p>
+
+        <div class="comparacion">
+          <table>
+            <thead>
+              <tr>
+                <th>Característica</th>
+                <th>Cascada</th>
+                <th>Iterativo</th>
+                <th>Ágil</th>
+                <th>DevOps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flexibilidad al cambio</td>
+                <td>Baja</td>
+                <td>Media</td>
+                <td>Alta</td>
+                <td>Alta</td>
+              </tr>
+              <tr>
+                <td>Documentación</td>
+                <td>Extensa</td>
+                <td>Moderada</td>
+                <td>Mínima</td>
+                <td>Automatizada</td>
+              </tr>
+              <tr>
+                <td>Participación del cliente</td>
+                <td>Al inicio y final</td>
+                <td>Al final de iteraciones</td>
+                <td>Continua</td>
+                <td>Orientada a feedback</td>
+              </tr>
+              <tr>
+                <td>Entrega de valor</td>
+                <td>Al final</td>
+                <td>Incremental</td>
+                <td>Frecuente</td>
+                <td>Continua</td>
+              </tr>
+              <tr>
+                <td>Gestión de riesgos</td>
+                <td>Difícil</td>
+                <td>Moderada</td>
+                <td>Proactiva</td>
+                <td>Continua</td>
+              </tr>
+              <tr>
+                <td>Tamaño de equipo ideal</td>
+                <td>Grande</td>
+                <td>Mediano/Grande</td>
+                <td>Pequeño</td>
+                <td>Multifuncional</td>
+              </tr>
+              <tr>
+                <td>Velocidad de desarrollo</td>
+                <td>Lenta</td>
+                <td>Media</td>
+                <td>Rápida</td>
+                <td>Muy rápida</td>
+              </tr>
+              <tr>
+                <td>Ideal para proyectos</td>
+                <td>Predecibles, críticos</td>
+                <td>Complejos, estructurados</td>
+                <td>Innovadores, cambiantes</td>
+                <td>Evolución continua</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="mejores-practicas">
+        <h2>Mejores Prácticas en Procesos de Software</h2>
+        <p>
+          Independientemente del modelo o metodología elegida, existen prácticas
+          que han demostrado mejorar los resultados en el desarrollo de
+          software:
+        </p>
+
+        <div class="card">
+          <h3>Prácticas técnicas</h3>
+          <ul>
+            <li>
+              <strong>Control de versiones:</strong> Uso de sistemas como Git
+              para gestionar cambios
+            </li>
+            <li>
+              <strong>Integración continua:</strong> Integración frecuente del
+              código para detectar problemas temprano
+            </li>
+            <li>
+              <strong>Automatización de pruebas:</strong> Creación de suites de
+              pruebas automatizadas
+            </li>
+            <li>
+              <strong>Revisión de código:</strong> Evaluación del código por
+              pares antes de su integración
+            </li>
+            <li>
+              <strong>Estándares de codificación:</strong> Adherencia a
+              convenciones que mejoran la legibilidad
+            </li>
+            <li>
+              <strong>Refactorización:</strong> Mejora continua del diseño del
+              código
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Prácticas de gestión</h3>
+          <ul>
+            <li>
+              <strong>Planificación adaptativa:</strong> Ajuste de planes
+              basados en resultados y feedback
+            </li>
+            <li>
+              <strong>Comunicación efectiva:</strong> Canales claros y oportunos
+            </li>
+            <li>
+              <strong>Retrospectivas:</strong> Revisión periódica del proceso
+              para mejorarlo
+            </li>
+            <li>
+              <strong>Gestión visual:</strong> Uso de tableros y gráficos para
+              visualizar progreso
+            </li>
+            <li>
+              <strong>Priorización de valor:</strong> Foco en entregar primero
+              lo más valioso
+            </li>
+            <li>
+              <strong>Equipos multifuncionales:</strong> Combinación de
+              habilidades necesarias
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>
+            Factores de éxito en la selección e implementación de procesos
+          </h3>
+          <ol>
+            <li>
+              <strong>Adecuación al contexto:</strong> Elegir el proceso que
+              mejor se adapte al proyecto y organización
+            </li>
+            <li>
+              <strong>Adaptación:</strong> Personalizar el proceso según
+              necesidades específicas
+            </li>
+            <li>
+              <strong>Mejora continua:</strong> Revisar y refinar el proceso
+              regularmente
+            </li>
+            <li>
+              <strong>Capacitación:</strong> Formar adecuadamente al equipo en
+              el proceso elegido
+            </li>
+            <li>
+              <strong>Compromiso:</strong> Asegurar que todos los involucrados
+              entienden y apoyan el proceso
+            </li>
+            <li>
+              <strong>Herramientas adecuadas:</strong> Seleccionar tecnologías
+              que faciliten el proceso
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 YMR </p>
+    </footer>
+  </body>
+</html>

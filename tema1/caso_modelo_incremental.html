@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudio: Desarrollo con Modelo Incremental</title>
+    <style>
+        :root {
+            --primary-color: #3f8b4c;
+            --secondary-color: #2c7339;
+            --accent-color: #f0a03c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--text-color);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .roles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .role-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .role-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .increments-container {
+            margin: 2rem 0;
+        }
+        
+        .increment-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .increment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .increment-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .increment-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .increment-duration {
+            margin-left: auto;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .increment-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 1rem 0;
+        }
+        
+        .feature-tag {
+            background-color: #e9f5e9;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #cce5cc;
+        }
+        
+        .process-cycle {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .cycle-phase {
+            flex: 1;
+            min-width: 180px;
+            max-width: 220px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .cycle-phase::after {
+            content: '→';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .cycle-phase:last-child::after {
+            content: '';
+        }
+        
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e9f5e9;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .advantages-disadvantages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .advantages, .disadvantages {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .advantages {
+            border-top: 4px solid var(--success-color);
+        }
+        
+        .disadvantages {
+            border-top: 4px solid var(--danger-color);
+        }
+        
+        .advantages h3 {
+            color: var(--success-color);
+        }
+        
+        .disadvantages h3 {
+            color: var(--danger-color);
+        }
+        
+        .challenges-container {
+            background-color: #fff8e6;
+            border: 1px solid #ffe5b4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .challenges-container h3 {
+            color: #b7791f;
+        }
+        
+        .challenge-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-container {
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .result-container h3 {
+            color: #1976d2;
+        }
+        
+        .reflection-container {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .reflection-container h3 {
+            color: #155724;
+        }
+        
+        .context-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .vs-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .model-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .model-card h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .model-card.cascada {
+            border-top: 4px solid #0056b3;
+        }
+        
+        .model-card.cascada h3 {
+            color: #0056b3;
+        }
+        
+        .model-card.incremental {
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        .model-card.incremental h3 {
+            color: var(--primary-color);
+        }
+        
+        .diagram {
+            height: 200px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            color: #666;
+        }
+        
+        footer {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .cycle-phase::after {
+                display: none;
+            }
+            
+            .cycle-phase {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Desarrollo de Software con Modelo Incremental</h1>
+                <p>Un caso de estudio sobre la evolución hacia enfoques más flexibles</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="context-section">
+            <h2>Contexto del Proyecto</h2>
+            <p>En 2003, la empresa "TechSolutions Inc." enfrentó el desafío de desarrollar un nuevo sistema de gestión de relaciones con clientes (CRM) para reemplazar su plataforma obsoleta. Tras experiencias previas con el modelo cascada que resultaron en entregas tardías y funcionalidades que no satisfacían plenamente a los usuarios, la dirección decidió adoptar un enfoque incremental.</p>
+            <p>El proyecto tenía un plazo de 10 meses y un presupuesto definido. El objetivo era desarrollar un sistema que proporcionara valor desde etapas tempranas y permitiera ajustes basados en retroalimentación real de los usuarios.</p>
+        </section>
+
+        <section class="vs-section">
+            <div class="model-card cascada">
+                <h3>Modelo Cascada (Anterior)</h3>
+                <div class="diagram">
+                    [Diagrama simplificado del modelo cascada]
+                </div>
+                <p>Anteriormente, la empresa utilizaba un enfoque secuencial y rígido donde:</p>
+                <ul>
+                    <li>Se definían todos los requisitos al inicio</li>
+                    <li>El desarrollo procedía fase por fase</li>
+                    <li>Las pruebas se realizaban al final</li>
+                    <li>Los usuarios veían el producto sólo al completarse</li>
+                </ul>
+            </div>
+
+            <div class="model-card incremental">
+                <h3>Modelo Incremental (Nuevo)</h3>
+                <div class="diagram">
+                    [Diagrama simplificado del modelo incremental]
+                </div>
+                <p>Con el nuevo enfoque incremental:</p>
+                <ul>
+                    <li>El sistema se dividió en incrementos funcionales</li>
+                    <li>Cada incremento pasaba por su propio ciclo de desarrollo</li>
+                    <li>Se entregaban versiones utilizables periódicamente</li>
+                    <li>La retroalimentación de usuarios influía en incrementos posteriores</li>
+                </ul>
+            </div>
+        </section>
+
+        <h2>Roles y Responsabilidades</h2>
+        <p>El modelo incremental requirió una estructura organizativa diferente, con roles más flexibles y mayor colaboración:</p>
+
+        <div class="roles-container">
+            <div class="role-card">
+                <h4>Gerente de Producto</h4>
+                <p><strong>Responsabilidades:</strong> Definición de la visión del producto, priorización de funcionalidades, toma de decisiones sobre el alcance de cada incremento.</p>
+                <p><strong>Perfil:</strong> Profesional con conocimiento del negocio y experiencia en gestión de productos de software.</p>
+                <p><strong>Diferencia vs. cascada:</strong> Mayor participación continua en el proceso de desarrollo, no solo al inicio y final.</p>
+            </div>
+
+            <div class="role-card">
+                <h4>Arquitecto de Soluciones</h4>
+                <p><strong>Responsabilidades:</strong> Diseño de una arquitectura evolutiva que permitiera crecer con cada incremento, garantizando coherencia técnica.</p>
+                <p><strong>Perfil:</strong> Ingeniero senior con experiencia en arquitecturas escalables y componentes reutilizables.</p>
+                <p><strong>Diferencia vs. cascada:</strong> Diseñaba para extensibilidad y cambio, no de forma completa y definitiva al inicio.</p>
+            </div>
+
+            <div class="role-card">
+                <h4>Líder Técnico</h4>
+                <p><strong>Responsabilidades:</strong> Coordinar aspectos técnicos entre incrementos, asegurar consistencia en implementaciones, guiar decisiones técnicas.</p>
+                <p><strong>Perfil:</strong> Desarrollador experimentado con capacidad de liderazgo y visión global.</p>
+                <p><strong>Actividades típicas:</strong> Revisiones de código, definición de estándares, mentorización del equipo.</p>
+            </div>
+        </div>
+
+        <div class="roles-container">
+            <div class="role-card">
+                <h4>Equipo de Desarrollo</h4>
+                <p><strong>Responsabilidades:</strong> Análisis, diseño, implementación y pruebas unitarias para cada incremento.</p>
+                <p><strong>Composición:</strong> 4-6 desarrolladores multifuncionales, capaces de trabajar en diferentes capas del sistema.</p>
+                <p><strong>Diferencia vs. cascada:</strong> Mayor autonomía y participación en decisiones de diseño, no solo implementación de especificaciones.</p>
+            </div>
+
+            <div class="role-card">
+                <h4>Analista de Calidad</h4>
+                <p><strong>Responsabilidades:</strong> Diseño y ejecución de pruebas para cada incremento, validación de integración con funcionalidades existentes.</p>
+                <p><strong>Perfil:</strong> Especialista en testing con conocimientos técnicos para automatizar pruebas.</p>
+                <p><strong>Diferencia vs. cascada:</strong> Participación desde el inicio de cada incremento, no solo en fase final.</p>
+            </div>
+
+            <div class="role-card">
+                <h4>Representantes de Usuarios</h4>
+                <p><strong>Responsabilidades:</strong> Proporcionar requisitos detallados, validar incrementos, ofrecer retroalimentación.</p>
+                <p><strong>Composición:</strong> 2-3 usuarios clave de diferentes departamentos (ventas, atención al cliente, marketing).</p>
+                <p><strong>Diferencia vs. cascada:</strong> Participación continua durante todo el desarrollo, no solo al inicio y final.</p>
+            </div>
+        </div>
+
+        <h2>El Ciclo de Desarrollo Incremental</h2>
+        <p>Cada incremento seguía un ciclo completo de desarrollo, pero a menor escala que un proyecto cascada tradicional:</p>
+
+        <div class="process-cycle">
+            <div class="cycle-phase">
+                <div class="phase-icon">1</div>
+                <h4>Análisis</h4>
+                <p>Definición detallada de requisitos para el incremento actual</p>
+            </div>
+            
+            <div class="cycle-phase">
+                <div class="phase-icon">2</div>
+                <h4>Diseño</h4>
+                <p>Diseño técnico y de interfaz para las funcionalidades del incremento</p>
+            </div>
+            
+            <div class="cycle-phase">
+                <div class="phase-icon">3</div>
+                <h4>Desarrollo</h4>
+                <p>Implementación del código para las funcionalidades</p>
+            </div>
+            
+            <div class="cycle-phase">
+                <div class="phase-icon">4</div>
+                <h4>Pruebas</h4>
+                <p>Verificación de nuevas funcionalidades e integración</p>
+            </div>
+            
+            <div class="cycle-phase">
+                <div class="phase-icon">5</div>
+                <h4>Entrega</h4>
+                <p>Despliegue del incremento y obtención de retroalimentación</p>
+            </div>
+        </div>
+
+        <h2>Incrementos del Proyecto CRM</h2>
+        <p>El sistema se dividió en varios incrementos, cada uno entregando funcionalidad utilizable:</p>
+
+        <div class="increments-container">
+            <div class="increment-card">
+                <div class="increment-header">
+                    <div class="increment-number">1</div>
+                    <div class="increment-title">Gestión de Clientes Básica</div>
+                    <div class="increment-duration">2 meses</div>
+                </div>
+                <p>El primer incremento estableció la infraestructura base del sistema y proporcionó funcionalidades esenciales para gestionar la información de clientes.</p>
+                <div class="increment-features">
+                    <span class="feature-tag">Registro de clientes</span>
+                    <span class="feature-tag">Búsqueda básica</span>
+                    <span class="feature-tag">Gestión de contactos</span>
+                    <span class="feature-tag">Seguridad básica</span>
+                </div>
+                <h4>Lecciones aprendidas:</h4>
+                <ul>
+                    <li>Los usuarios necesitaban campos adicionales para clasificar clientes</li>
+                    <li>La interfaz de búsqueda requería refinamiento para mayor usabilidad</li>
+                    <li>La velocidad de respuesta era adecuada y se estableció como referencia</li>
+                </ul>
+            </div>
+
+            <div class="increment-card">
+                <div class="increment-header">
+                    <div class="increment-number">2</div>
+                    <div class="increment-title">Gestión de Oportunidades de Venta</div>
+                    <div class="increment-duration">2 meses</div>
+                </div>
+                <p>El segundo incremento añadió funcionalidades para seguimiento de oportunidades de venta, integradas con la gestión de clientes ya implementada.</p>
+                <div class="increment-features">
+                    <span class="feature-tag">Pipeline de ventas</span>
+                    <span class="feature-tag">Seguimiento de oportunidades</span>
+                    <span class="feature-tag">Asignación a vendedores</span>
+                    <span class="feature-tag">Reportes básicos</span>
+                </div>
+                <h4>Ajustes basados en retroalimentación:</h4>
+                <ul>
+                    <li>Se añadieron los campos adicionales para clientes solicitados en el incremento 1</li>
+                    <li>Se mejoró la interfaz de búsqueda según sugerencias de usuarios</li>
+                    <li>Se modificó el flujo de trabajo para oportunidades basado en prácticas reales observadas</li>
+                </ul>
+            </div>
+
+            <div class="increment-card">
+                <div class="increment-header">
+                    <div class="increment-number">3</div>
+                    <div class="increment-title">Gestión de Actividades y Recordatorios</div>
+                    <div class="increment-duration">1.5 meses</div>
+                </div>
+                <p>Este incremento permitió a los vendedores programar y dar seguimiento a actividades relacionadas con clientes y oportunidades.</p>
+                <div class="increment-features">
+                    <span class="feature-tag">Calendario de actividades</span>
+                    <span class="feature-tag">Recordatorios automáticos</span>
+                    <span class="feature-tag">Registro de llamadas/reuniones</span>
+                    <span class="feature-tag">Notificaciones</span>
+                </div>
+                <h4>Observaciones clave:</h4>
+                <ul>
+                    <li>Se identificó la necesidad de integración con el correo electrónico corporativo</li>
+                    <li>Los recordatorios móviles resultaron más valiosos de lo previsto inicialmente</li>
+                    <li>La adopción por usuarios aumentó significativamente con este incremento</li>
+                </ul>
+            </div>
+
+            <div class="increment-card">
+                <div class="increment-header">
+                    <div class="increment-number">4</div>
+                    <div class="increment-title">Cotizaciones y Contratos</div>
+                    <div class="increment-duration">2 meses</div>
+                </div>
+                <p>Este incremento añadió funcionalidades para generar, gestionar y dar seguimiento a cotizaciones y contratos con clientes.</p>
+                <div class="increment-features">
+                    <span class="feature-tag">Generación de cotizaciones</span>
+                    <span class="feature-tag">Plantillas personalizables</span>
+                    <span class="feature-tag">Seguimiento de estados</span>
+                    <span class="feature-tag">Aprobaciones</span>
+                </div>
+                <h4>Cambios significativos:</h4>
+                <ul>
+                    <li>Se añadió integración con el correo electrónico basado en retroalimentación del incremento 3</li>
+                    <li>Se refinó el catálogo de productos para facilitar la creación de cotizaciones</li>
+                    <li>Se desarrolló un sistema de aprobaciones no previsto inicialmente</li>
+                </ul>
+            </div>
+
+            <div class="increment-card">
+                <div class="increment-header">
+                    <div class="increment-number">5</div>
+                    <div class="increment-title">Análisis y Reportes Avanzados</div>
+                    <div class="increment-duration">1.5 meses</div>
+                </div>
+                <p>El incremento final incorporó capacidades avanzadas de reportes y análisis para la toma de decisiones gerenciales.</p>
+                <div class="increment-features">
+                    <span class="feature-tag">Dashboards personalizables</span>
+                    <span class="feature-tag">Reportes programados</span>
+                    <span class="feature-tag">Análisis predictivo</span>
+                    <span class="feature-tag">Exportación de datos</span>
+                </div>
+                <h4>Resultados finales:</h4>
+                <ul>
+                    <li>Se incorporaron métricas de negocio que no estaban en el alcance inicial</li>
+                    <li>Se refinaron dashboards basados en uso real observado</li>
+                    <li>Se simplificaron algunas visualizaciones complejas tras pruebas con usuarios</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="advantages-disadvantages">
+            <div class="advantages">
+                <h3>Ventajas Observadas</h3>
+                <ul>
+                    <li><strong>Entrega temprana de valor:</strong> Los usuarios comenzaron a utilizar el sistema a partir del segundo mes, en lugar de esperar 10 meses.</li>
+                    <li><strong>Adaptabilidad:</strong> El feedback de usuarios reales permitió ajustar cada nuevo incremento para satisfacer mejor las necesidades.</li>
+                    <li><strong>Gestión de riesgos:</strong> Los problemas se identificaron y solucionaron temprano, evitando impactos mayores al final del proyecto.</li>
+                    <li><strong>Mayor satisfacción:</strong> Los usuarios se sintieron escuchados al ver sus sugerencias implementadas en incrementos posteriores.</li>
+                    <li><strong>Aprendizaje continuo:</strong> El equipo mejoró sus prácticas con cada incremento basándose en lecciones previas.</li>
+                </ul>
+            </div>
+
+            <div class="disadvantages">
+                <h3>Desafíos Enfrentados</h3>
+                <ul>
+                    <li><strong>Diseño inicial:</strong> Crear una arquitectura que soportara incrementos futuros sin conocer todos los detalles requirió mayor experiencia.</li>
+                    <li><strong>Refactorización:</strong> A veces fue necesario rehacer partes implementadas en incrementos anteriores para acomodar nuevas funcionalidades.</li>
+                    <li><strong>Expectativas de usuarios:</strong> Al ver el sistema temprano, algunos usuarios solicitaron cambios que estaban fuera del alcance planeado.</li>
+                    <li><strong>Documentación:</strong> Mantener actualizada la documentación con cada incremento requirió disciplina adicional.</li>
+                    <li><strong>Pruebas de regresión:</strong> Asegurar que nuevos incrementos no afectaran funcionalidades previas exigió mayor esfuerzo en pruebas.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="challenges-container">
+            <h3>Principales Desafíos del Modelo Incremental</h3>
+            
+            <div class="challenge-item">
+                <h4>1. Definición del alcance de cada incremento</h4>
+                <p>Determinar qué funcionalidades incluir en cada incremento para que fuera útil pero manejable requirió equilibrio entre varios factores. El equipo tuvo que aprender a no sobrecargarse y a dividir funcionalidades complejas entre incrementos.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>2. Diseño para la evolución</h4>
+                <p>Crear una arquitectura suficientemente flexible para acomodar incrementos futuros sin conocer todos sus detalles fue complicado. El equipo tuvo que equilibrar entre flexibilidad y sobrediseño.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>3. Gestión de expectativas</h4>
+                <p>Al entregar software funcional tempranamente, los usuarios a veces esperaban que todas sus solicitudes se implementaran inmediatamente. Fue necesario un proceso claro para priorizar cambios y mejoras.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>4. Mantenimiento de la coherencia</h4>
+                <p>Asegurar que cada incremento mantuviera coherencia visual, funcional y de experiencia de usuario con los anteriores requirió atención continua. El equipo implementó revisiones de diseño para garantizar consistencia.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>5. Complejidad de integración</h4>
+                <p>Cada nuevo incremento debía integrarse perfectamente con los anteriores. Esto requirió pruebas de regresión más extensas y un enfoque cuidadoso para la integración continua.</p>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <h3>Resultado del Proyecto</h3>
+            <p>El proyecto se completó en 9 meses, un mes antes de lo previsto, y dentro del presupuesto asignado. A diferencia de proyectos anteriores en cascada, el sistema CRM fue bien recibido por los usuarios desde su implementación inicial.</p>
+            <p>Ventajas clave observadas:</p>
+            <li>Los departamentos de ventas y atención al cliente comenzaron a obtener beneficios del sistema desde el tercer mes, en lugar de esperar hasta el final del proyecto.</li>
+                <li>Las modificaciones basadas en retroalimentación real resultaron en un producto final más alineado con las necesidades de los usuarios.</li>
+                <li>La tasa de adopción alcanzó el 85% en el primer mes tras la implementación completa, comparado con el 40% típico en proyectos anteriores.</li>
+                <li>El número de solicitudes de cambios post-implementación se redujo en un 70% comparado con proyectos en cascada previos.</li>
+                <li>El tiempo de capacitación de nuevos usuarios disminuyó significativamente debido a la familiaridad que ya tenían con partes del sistema.</li>
+                <li>La moral del equipo de desarrollo mejoró al ver su trabajo siendo utilizado y valorado incrementalmente.</li>
+                <li>Se generó un ROI más rápido al comenzar a mejorar la eficiencia de ventas desde etapas tempranas del proyecto.</li>
+            </ul>
+            <p>El éxito del enfoque incremental llevó a la empresa a adoptar este modelo para futuros desarrollos, eventualmente evolucionando hacia metodologías ágiles más formales como Scrum en los años siguientes.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 YMR</p>
+                <p>Caso de estudio educativo sobre metodologías de desarrollo</p>
+
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudio: Desarrollo con Metodología Kanban</title>
+    <style>
+        :root {
+            --primary-color: #1e88e5;
+            --secondary-color: #0d47a1;
+            --accent-color: #ff9800;
+            --light-bg: #f5f5f5;
+            --dark-bg: #263238;
+            --text-color: #333;
+            --light-text: #fff;
+            --border-color: #ddd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --info-color: #2196f3;
+            --todo-color: #ffcdd2;
+            --inprogress-color: #fff9c4;
+            --review-color: #c8e6c9;
+            --done-color: #bbdefb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--text-color);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .context-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .principles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .principle-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .principle-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .principle-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .roles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .role-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .role-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .kanban-board {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        .board-container {
+            display: flex;
+            gap: 15px;
+            min-width: 750px;
+        }
+        
+        .board-column {
+            flex: 1;
+            min-width: 200px;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .column-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+        
+        .backlog {
+            background-color: #eceff1;
+        }
+        
+        .backlog .column-header {
+            background-color: #cfd8dc;
+        }
+        
+        .todo {
+            background-color: var(--todo-color);
+        }
+        
+        .todo .column-header {
+            background-color: #ef9a9a;
+        }
+        
+        .inprogress {
+            background-color: var(--inprogress-color);
+        }
+        
+        .inprogress .column-header {
+            background-color: #fff59d;
+        }
+        
+        .review {
+            background-color: var(--review-color);
+        }
+        
+        .review .column-header {
+            background-color: #a5d6a7;
+        }
+        
+        .done {
+            background-color: var(--done-color);
+        }
+        
+        .done .column-header {
+            background-color: #90caf9;
+        }
+        
+        .kanban-card {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .card-type {
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .feature {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .bug {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .improvement {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .practices-container {
+            margin: 2rem 0;
+        }
+        
+        .practice-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .practice-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .practice-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .metrics-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .metrics-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            flex: 1;
+            min-width: 220px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        .metric-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .timeline-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -13px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .challenges-container {
+            background-color: #fff3e0;
+            border: 1px solid #ffe0b2;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .challenges-container h3 {
+            color: #e65100;
+        }
+        
+        .challenge-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-container {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .result-container h3 {
+            color: #2e7d32;
+        }
+        
+        .quote-container {
+            background-color: #f5f5f5;
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+        }
+        
+        .quote-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            height: 300px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            color: #666;
+        }
+        
+        footer {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Desarrollo de Software con Metodología Kanban</h1>
+                <p>Un caso de estudio sobre la implementación de flujos de trabajo visuales y mejora continua</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="context-section">
+            <h2>Contexto del Proyecto</h2>
+            <p>En 2016, el departamento de TI de "Global Insurance Services", una empresa multinacional de seguros, enfrentaba desafíos significativos en el mantenimiento y evolución de sus sistemas críticos. El equipo de desarrollo responsable de la plataforma central de gestión de pólizas experimentaba:</p>
+            <ul>
+                <li>Tiempos de entrega impredecibles y frecuentemente retrasados</li>
+                <li>Alta cantidad de trabajo en progreso (WIP) que raramente se completaba</li>
+                <li>Frecuentes cambios de prioridades que causaban interrupciones constantes</li>
+                <li>Baja visibilidad del estado real de las tareas y bloqueos</li>
+                <li>Tensiones entre el equipo de desarrollo y las áreas de negocio</li>
+            </ul>
+            <p>Tras intentar implementar Scrum sin éxito debido a la naturaleza impredecible de su flujo de trabajo (principalmente mantenimiento y mejoras incrementales con frecuentes urgencias), decidieron adoptar Kanban como enfoque para gestionar su trabajo y mejorar gradualmente sus procesos.</p>
+        </section>
+
+        <h2>Principios Fundamentales de Kanban Aplicados</h2>
+        <p>El equipo adoptó Kanban basándose en sus principios fundamentales:</p>
+
+        <div class="principles-container">
+            <div class="principle-card">
+                <h3>Comenzar con lo que haces ahora</h3>
+                <p>En lugar de introducir cambios radicales, Kanban se aplicó inicialmente sobre el proceso existente, simplemente haciendo visible el flujo de trabajo actual.</p>
+                <p>Implementación:</p>
+                <ul>
+                    <li>Mapeo del proceso actual sin modificaciones iniciales</li>
+                    <li>Visualización del trabajo en curso en un tablero físico</li>
+                    <li>Identificación de roles y responsabilidades existentes</li>
+                    <li>Respeto a los procesos, funciones y responsabilidades actuales</li>
+                </ul>
+            </div>
+
+            <div class="principle-card">
+                <h3>Acordar perseguir el cambio evolutivo</h3>
+                <p>El equipo y la dirección acordaron que la mejora sería incremental y evolutiva, basada en datos y consenso, no en reorganizaciones radicales.</p>
+                <p>Implementación:</p>
+                <ul>
+                    <li>Establecimiento de métricas base para evaluar mejoras</li>
+                    <li>Reuniones regulares de mejora continua (Kaizen)</li>
+                    <li>Cambios pequeños y graduales en el proceso</li>
+                    <li>Experimentos controlados para validar mejoras</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="principles-container">
+            <div class="principle-card">
+                <h3>Respetar el proceso actual</h3>
+                <p>Se mantuvieron inicialmente los roles, responsabilidades y títulos existentes, reconociendo el valor en el proceso actual mientras se buscaban oportunidades de mejora.</p>
+                <p>Implementación:</p>
+                <ul>
+                    <li>No se reorganizó el equipo ni se cambiaron títulos</li>
+                    <li>Mantenimiento de procesos de aprobación existentes</li>
+                    <li>Validación de buenas prácticas ya establecidas</li>
+                    <li>Foco en mejorar debilidades sin descartar fortalezas</li>
+                </ul>
+            </div>
+
+            <div class="principle-card">
+                <h3>Fomentar el liderazgo en todos los niveles</h3>
+                <p>Se promovió que cualquier miembro del equipo, independientemente de su rol, pudiera proponer y liderar mejoras en los procesos.</p>
+                <p>Implementación:</p>
+                <ul>
+                    <li>Rotación en la facilitación de reuniones diarias</li>
+                    <li>Empoderamiento para sugerir ajustes al tablero</li>
+                    <li>Iniciativas de mejora propuestas por cualquier nivel</li>
+                    <li>Reconocimiento a ideas implementadas exitosamente</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Implementación del Tablero Kanban</h2>
+        <p>El equipo comenzó visualizando su flujo de trabajo en un tablero Kanban físico, que luego migró a una herramienta digital (Jira) manteniendo la misma estructura:</p>
+
+        <div class="kanban-board">
+            <div class="board-container">
+                <div class="board-column backlog">
+                    <div class="column-header">Backlog</div>
+                    <div class="kanban-card">
+                        <div class="card-type feature">Feature</div>
+                        <div class="card-title">Exportación de datos a Excel</div>
+                        <p>Permitir exportación de reportes en formato Excel</p>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="card-type improvement">Improvement</div>
+                        <div class="card-title">Optimizar consultas de búsqueda</div>
+                        <p>Mejorar rendimiento de búsquedas complejas</p>
+                    </div>
+                </div>
+                
+                <div class="board-column todo">
+                    <div class="column-header">To Do</div>
+                    <div class="kanban-card">
+                        <div class="card-type bug">Bug</div>
+                        <div class="card-title">Error en cálculo de primas</div>
+                        <p>Corregir fórmula para pólizas multiriesgo</p>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="card-type feature">Feature</div>
+                        <div class="card-title">Notificaciones móviles</div>
+                        <p>Enviar alertas de vencimiento vía app</p>
+                    </div>
+                </div>
+                
+                <div class="board-column inprogress">
+                    <div class="column-header">In Progress</div>
+                    <div class="kanban-card">
+                        <div class="card-type improvement">Improvement</div>
+                        <div class="card-title">Rediseñar dashboard</div>
+                        <p>Actualizar interfaz principal para gestores</p>
+                    </div>
+                </div>
+                
+                <div class="board-column review">
+                    <div class="column-header">Review</div>
+                    <div class="kanban-card">
+                        <div class="card-type feature">Feature</div>
+                        <div class="card-title">Integración con pagos online</div>
+                        <p>Conectar con nueva pasarela de pagos</p>
+                    </div>
+                </div>
+                
+                <div class="board-column done">
+                    <div class="column-header">Done</div>
+                    <div class="kanban-card">
+                        <div class="card-type bug">Bug</div>
+                        <div class="card-title">Corrección cálculo fiscal</div>
+                        <p>Aplicar nuevas tasas según normativa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>El tablero evolucionó gradualmente a lo largo del tiempo, añadiendo subcategorías, carriles de natación (swimlanes) para diferentes tipos de trabajo y columnas adicionales para reflejar mejor el proceso real.</p>
+
+        <h2>Principales Prácticas Kanban Implementadas</h2>
+
+        <div class="practices-container">
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">👁️</div>
+                    <div class="practice-title">Visualización del Flujo de Trabajo</div>
+                </div>
+                <p>El equipo hizo visible todo el trabajo en proceso, creando transparencia sobre el estado y los bloqueos.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Tablero físico inicial en una pared visible para todo el equipo</li>
+                    <li>Transición posterior a tablero digital en Jira con proyecciones diarias</li>
+                    <li>Uso de tarjetas de colores para diferenciar tipos de trabajo</li>
+                    <li>Visualización de bloqueos con notas rojas destacadas</li>
+                    <li>Inclusión de avatares para mostrar quién trabajaba en cada tarea</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Mayor claridad sobre prioridades reales para todo el equipo</li>
+                    <li>Identificación inmediata de cuellos de botella en el proceso</li>
+                    <li>Reducción de reuniones de status al tener información visible</li>
+                    <li>Mejor colaboración para resolver bloqueos evidentes</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">🔄</div>
+                    <div class="practice-title">Limitación del Trabajo en Progreso (WIP)</div>
+                </div>
+                <p>Se establecieron límites para la cantidad de trabajo que podía estar activo simultáneamente en cada fase del proceso.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Límites WIP iniciales conservadores (2 ítems por desarrollador)</li>
+                    <li>Ajuste gradual basado en datos de rendimiento</li>
+                    <li>Diferentes límites para distintos tipos de trabajo (features vs. bugs)</li>
+                    <li>Política de "stop the line" cuando se alcanzaban límites WIP</li>
+                    <li>Carril express para emergencias con su propio límite WIP</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Reducción del tiempo de ciclo en un 47%</li>
+                    <li>Disminución del multitasking y sus interrupciones asociadas</li>
+                    <li>Mayor enfoque en completar trabajo antes de iniciar nuevo</li>
+                    <li>Mejora en la previsibilidad de entregas</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">📊</div>
+                    <div class="practice-title">Gestión del Flujo</div>
+                </div>
+                <p>Se monitorizó y analizó el flujo de trabajo para identificar problemas y oportunidades de optimización.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Medición de tiempos de ciclo para diferentes tipos de trabajo</li>
+                    <li>Registro y análisis de causas de bloqueos</li>
+                    <li>Generación de diagramas de flujo acumulativo (CFD)</li>
+                    <li>Reuniones semanales para analizar métricas de flujo</li>
+                    <li>Ajustes al proceso basados en datos concretos</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Identificación precisa de fases problemáticas (testing era el cuello de botella principal)</li>
+                    <li>Mejor estimación de tiempos de entrega (± 15% de precisión)</li>
+                    <li>Redistribución de recursos hacia áreas de mayor impacto</li>
+                    <li>Simplificación de fases que añadían poco valor</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">📝</div>
+                    <div class="practice-title">Políticas Explícitas</div>
+                </div>
+                <p>Se definieron y documentaron claramente las reglas de funcionamiento del proceso.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Criterios de entrada/salida para cada columna del tablero</li>
+                    <li>Definición de clases de servicio (estándar, urgente, fecha fija)</li>
+                    <li>Políticas de escalado para bloqueos</li>
+                    <li>Acuerdos sobre priorización y gestión de interrupciones</li>
+                    <li>Documentación visible junto al tablero Kanban</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Reducción de malentendidos y conflictos entre equipo y stakeholders</li>
+                    <li>Mayor autonomía del equipo al tener reglas claras</li>
+                    <li>Integración más sencilla de nuevos miembros al equipo</li>
+                    <li>Menos discusiones improductivas sobre procedimientos</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">📈</div>
+                    <div class="practice-title">Bucles de Retroalimentación</div>
+                </div>
+                <p>Se implementaron mecanismos regulares para evaluar el rendimiento y ajustar el proceso.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Reuniones diarias breves frente al tablero (15 minutos)</li>
+                    <li>Revisiones de entrega para cada ítem completado</li>
+                    <li>Reuniones de reposición (replenishment) semanales</li>
+                    <li>Reuniones de operaciones mensuales (análisis de métricas)</li>
+                    <li>Retrospectivas de mejora de servicio trimestrales</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Adaptación continua del proceso a necesidades cambiantes</li>
+                    <li>Identificación temprana de tendencias negativas</li>
+                    <li>Mayor involucración de stakeholders en la mejora del proceso</li>
+                    <li>Cultura de experimentación y aprendizaje</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <div class="practice-header">
+                    <div class="practice-icon">🔄</div>
+                    <div class="practice-title">Mejora Colaborativa</div>
+                </div>
+                <p>Se utilizó el método científico para implementar y validar mejoras de proceso mediante modelos compartidos.</p>
+                <h4>Implementación en Global Insurance:</h4>
+                <ul>
+                    <li>Modelo PDCA (Plan-Do-Check-Act) para experimentos</li>
+                    <li>Talleres de identificación de desperdicios (Muda)</li>
+                    <li>Mapeo de cadena de valor (Value Stream Mapping)</li>
+                    <li>Votación de equipo para priorizar iniciativas de mejora</li>
+                    <li>Documentación de experimentos y resultados</li>
+                </ul>
+                <h4>Resultados observados:</h4>
+                <ul>
+                    <li>Simplificación de procesos de aprobación redundantes</li>
+                    <li>Adopción de prácticas técnicas como integración continua</li>
+                    <li>Mayor sentido de propiedad del proceso por parte del equipo</li>
+                    <li>Establecimiento de una cultura de mejora continua sostenible</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Evolución de Métricas Clave</h2>
+        <p>El equipo monitorizó un conjunto de métricas para evaluar la efectividad de Kanban y guiar mejoras continuas:</p>
+
+        <section class="metrics-section">
+            <div class="chart-container">
+                [Gráfico de tendencia de tiempos de ciclo a lo largo de 18 meses]
+            </div>
+
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-label">Reducción de Tiempo de Ciclo</div>
+                    <div class="metric-value">47%</div>
+                    <p>De 24 días a 12.7 días en promedio</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Predictibilidad</div>
+                    <div class="metric-value">85%</div>
+                    <p>de entregas dentro del plazo previsto</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Reducción de WIP</div>
+                    <div class="metric-value">56%</div>
+                    <p>Menor cantidad de trabajo paralelo</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Tasa de Defectos</div>
+                    <div class="metric-value">-38%</div>
+                    <p>Menos defectos en producción</p>
+                </div>
+            </div>
+
+            <p>La tendencia más significativa fue la reducción constante del tiempo de ciclo, que permitió responder más rápidamente a las necesidades del negocio sin sacrificar la calidad.</p>
+        </section>
+
+        <h2>Cronología de la Implementación</h2>
+        <p>La adopción de Kanban en Global Insurance Services siguió un enfoque evolutivo a lo largo de 18 meses:</p>
+
+        <div class="timeline-container">
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Fase 1: Visualización (Mes 1-2)</h3>
+                        <p>Creación del tablero Kanban inicial para visualizar el flujo de trabajo existente sin cambiar procesos. Simplemente se hizo visible lo que antes era invisible.</p>
+                        <p><strong>Logros clave:</strong> Tablero físico implementado, mayor transparencia, primeras métricas de referencia establecidas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Fase 2: Análisis y Primeros Límites (Mes 3-4)</h3>
+                        <p>Análisis de flujo de trabajo, identificación de cuellos de botella y establecimiento de los primeros límites WIP conservadores.</p>
+                        <p><strong>Logros clave:</strong> Primera reducción visible de trabajo en progreso, mejora en la terminación de tareas, detección de áreas problemáticas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Fase 3: Refinamiento del Proceso (Mes 5-8)</h3>
+                        <p>Ajuste de columnas y estados para reflejar mejor el proceso real, implementación de políticas explícitas y clases de servicio para diferentes tipos de trabajo.</p>
+                        <p><strong>Logros clave:</strong> Reducción del 25% en tiempo de ciclo, mayor claridad en prioridades, menos interrupciones.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Fase 4: Optimización (Mes 9-12)</h3>
+                        <p>Análisis detallado de métricas, ajuste de límites WIP basado en datos, implementación de carriles de natación para trabajo de diferentes tipos, migración a herramienta digital.</p>
+                        <p><strong>Logros clave:</strong> Reducción adicional del 15% en tiempo de ciclo, mejora de la previsibilidad, automatización de métricas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Fase 5: Mejora Sistémica (Mes 13-18)</h3>
+                        <p>Implementación de cambios más profundos en el proceso basados en datos, incorporación de prácticas técnicas complementarias, escalado de Kanban a otros equipos.</p>
+                        <p><strong>Logros clave:</strong> Reducción del 47% total en tiempo de ciclo, adopción por otros 3 equipos, reconocimiento formal de la dirección por mejoras significativas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenges-container">
+            <h3>Desafíos Enfrentados durante la Implementación</h3>
+            
+            <div class="challenge-item">
+                <h4>1. Resistencia inicial a la visibilidad</h4>
+                <p>Algunos miembros del equipo se sentían incómodos al hacer visible su trabajo y progreso real. Se abordó mediante la creación de un ambiente de confianza, enfatizando que el tablero era una herramienta para identificar problemas del sistema, no para evaluar desempeño individual.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>2. Gestión de expectativas sobre velocidad</h4>
+                <p>Inicialmente, algunos gerentes esperaban entregas más rápidas con la simple implementación de Kanban. Se educó sobre la naturaleza evolutiva de Kanban y se establecieron expectativas realistas basadas en datos, no en deseos.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>3. Equilibrio entre tipos de trabajo</h4>
+                <p>El equipo luchaba por equilibrar el mantenimiento rutinario, mejoras planificadas y emergencias. Se implementaron carriles dedicados con políticas específicas y límites WIP para cada tipo de trabajo, junto con clases de servicio diferenciadas.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>4. Transición a herramienta digital</h4>
+                <p>Al migrar del tablero físico a Jira, se perdió inicialmente parte de la visibilidad inmediata. Se implementaron pantallas dedicadas en la oficina mostrando el tablero digital y se mantuvieron ceremonias frente a estas visualizaciones.</p>
+            </div>
+            
+            <div class="challenge-item">
+                <h4>5. Colaboración con equipos externos</h4>
+                <p>El proceso dependía de equipos que no utilizaban Kanban. Se extendió el tablero para incluir estados que reflejaran el trabajo externo y se invitó a representantes de esos equipos a las reuniones diarias, creando gradualmente interés en adoptar prácticas similares.</p>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <h3>Resultados del Proyecto</h3>
+            <p>Después de 18 meses de implementación evolutiva de Kanban, Global Insurance Services experimentó mejoras significativas en su capacidad para entregar valor al negocio:</p>
+            
+            <ul>
+                <li><strong>Mayor capacidad de respuesta:</strong> El tiempo de ciclo se redujo en un 47%, permitiendo responder más rápidamente a necesidades cambiantes del negocio.</li>
+                <li><strong>Mejor previsibilidad:</strong> La predictibilidad de entregas alcanzó el 85%, lo que mejoró significativamente la planificación y la confianza de las áreas de negocio.</li>
+                <li><strong>Reducción de desperdicios:</strong> La limitación del WIP redujo el multitasking, las interrupciones y el trabajo obsoleto o cancelado.</li>
+                <li><strong>Mejor calidad:</strong> Los defectos en producción se redujeron en un 38%, gracias a procesos más controlados y menos trabajo apresurado.</li>
+                <li><strong>Mayor satisfacción:</strong> Tanto el equipo como los stakeholders reportaron mayor satisfacción con el proceso y los resultados.</li>
+                <li><strong>Cultura de mejora:</strong> Se estableció una cultura de mejora continua basada en datos, no en opiniones o modas.</li>
+            </ul>
+            
+            <p>El éxito fue tal que la metodología Kanban se extendió a otros 7 equipos en la organización durante los siguientes 12 meses, y se estableció una Oficina de Gestión Ágil para apoyar la adopción de estas prácticas en toda la empresa.</p>
+        </div>
+
+        <div class="quote-container">
+            <p class="quote-text">"Kanban nos dio una forma de gestionar el caos sin añadir más caos. No tratamos de cambiar todo de golpe, sino que mejoramos gradualmente lo que teníamos. La visibilidad y los datos nos permitieron tomar decisiones informadas, y los límites WIP nos ayudaron a dejar de fingir que podíamos hacer todo a la vez. Ahora entregamos más valor siendo realistas sobre nuestra capacidad."</p>
+            <p class="quote-author">— Director de Desarrollo, Global Insurance Services</p>
+        </div>
+
+        <h2>Lecciones Aprendidas</h2>
+        <p>Esta implementación de Kanban en Global Insurance Services proporciona varias lecciones valiosas:</p>
+
+        <section class="context-section">
+            <ul>
+                <li><strong>El enfoque evolutivo genera menos resistencia:</strong> Comenzar con lo que se hace ahora y mejorarlo gradualmente resultó más efectivo que intentar cambios radicales.</li>
+                <li><strong>La visualización por sí sola tiene valor:</strong> Simplemente hacer visible el trabajo y el proceso actual generó mejoras inmediatas en la coordinación y resolución de problemas.</li>
+                <li><strong>Los límites WIP son transformadores:</strong> Limitar el trabajo en progreso fue la práctica individual que generó el mayor impacto en la productividad y previsibilidad.</li>
+                <li><strong>Los datos superan las opiniones:</strong> Las métricas objetivas permitieron superar debates improductivos y guiar las mejoras basadas en evidencia.</li>
+                <li><strong>Las políticas explícitas reducen conflictos:</strong> Documentar claramente las reglas del proceso redujo malentendidos y discusiones improductivas.</li>
+                <li><strong>La mejora continua requiere disciplina:</strong> Los bucles de retroalimentación regulares y las reuniones de revisión fueron esenciales para mantener el impulso de mejora.</li>
+                <li><strong>Kanban complementa otras prácticas:</strong> En lugar de reemplazar todas las prácticas existentes, Kanban permitió conservar lo que funcionaba bien e integrar nuevas prácticas cuando era necesario.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 YMR</p>
+                <p>Caso de estudio educativo sobre metodologías de desarrollo</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

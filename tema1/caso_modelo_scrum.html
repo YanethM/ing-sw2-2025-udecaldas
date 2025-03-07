@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso de Estudio: Desarrollo con Metodología Scrum</title>
+    <style>
+        :root {
+            --primary-color: #6b5b95;
+            --secondary-color: #574b7c;
+            --accent-color: #feb236;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --text-color: #333;
+            --light-text: #fff;
+            --border-color: #dee2e6;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --info-color: #2196f3;
+            --backlog-color: #e3f2fd;
+            --sprint-color: #fff3e0;
+            --review-color: #e0f2f1;
+            --retrospective-color: #f3e5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--text-color);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .context-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .values-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .value-card {
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .value-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .roles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .role-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .role-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .events-container {
+            margin: 2rem 0;
+        }
+        
+        .event-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .event-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .event-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .event-duration {
+            margin-left: auto;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .sprint-cycle {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .cycle-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .cycle-step {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            margin: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            border: 2px solid var(--secondary-color);
+        }
+        
+        .cycle-step::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 30px;
+            font-size: 2rem;
+            color: var(--primary-color);
+            z-index: 1;
+        }
+        
+        .cycle-step:last-child::after {
+            content: '';
+        }
+        
+        .artifacts-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .artifact-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid var(--accent-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .artifact-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .artifact-card h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sprint-example {
+            background-color: var(--sprint-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .sprint-progress {
+            display: flex;
+            flex-direction: column;
+            margin: 2rem 0;
+        }
+        
+        .progress-chart {
+            height: 300px;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            color: #666;
+        }
+        
+        .user-story {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .story-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .story-points {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .story-status {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--info-color);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .status-done {
+            background-color: var(--success-color);
+        }
+        
+        .status-inprogress {
+            background-color: var(--warning-color);
+        }
+        
+        .status-todo {
+            background-color: var(--info-color);
+        }
+        
+        .status-blocked {
+            background-color: var(--danger-color);
+        }
+        
+        .challenges-container {
+            background-color: #fff3e0;
+            border: 1px solid #ffe0b2;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .challenges-container h3 {
+            color: #e65100;
+        }
+        
+        .challenge-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-container {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .results-container h3 {
+            color: #2e7d32;
+        }
+        
+        .metrics-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            flex: 1;
+            min-width: 220px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        .metric-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .timeline-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -13px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quote-container {
+            background-color: #f5f5f5;
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+        }
+        
+        .quote-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+            
+            .cycle-step::after {
+                display: none;
+            }
+            
+            .cycle-step {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Desarrollo de Software con Metodología Scrum</h1>
+                <p>Un caso de estudio sobre la implementación de desarrollo ágil en equipos multidisciplinarios</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="context-section">
+            <h2>Contexto del Proyecto</h2>
+            <p>En 2019, "NovaTech Solutions", una empresa de desarrollo de software con sede en Madrid, enfrentaba un desafío significativo: desarrollar una plataforma de comercio electrónico completa para "Fashionista", una cadena de tiendas de moda en expansión que buscaba establecer su presencia online.</p>
+            <p>El proyecto presentaba varios desafíos específicos:</p>
+            <ul>
+                <li>Requisitos en constante evolución debido a las cambiantes tendencias del mercado</li>
+                <li>Necesidad de integración con múltiples sistemas externos (pagos, inventario, logística)</li>
+                <li>Plazos ajustados con lanzamiento previsto en 6 meses</li>
+                <li>Equipo multidisciplinario con diferentes niveles de experiencia</li>
+                <li>Alto nivel de expectativas del cliente en cuanto a calidad y experiencia de usuario</li>
+            </ul>
+            <p>Tras evaluar diferentes enfoques, NovaTech decidió implementar Scrum como marco de trabajo ágil para gestionar el desarrollo del proyecto, con el objetivo de entregar valor incrementalmente y adaptarse rápidamente a los cambios.</p>
+        </section>
+
+        <h2>Valores y Principios Scrum Aplicados</h2>
+        <p>El equipo adoptó los valores fundamentales de Scrum como base para su forma de trabajo:</p>
+
+        <div class="values-container">
+            <div class="value-card">
+                <h3>Compromiso</h3>
+                <p>El equipo se comprometió personalmente con el logro de los objetivos del Sprint y el éxito general del proyecto.</p>
+                <p>Manifestación en el proyecto:</p>
+                <ul>
+                    <li>Compromiso con objetivos realistas en cada Sprint</li>
+                    <li>Transparencia sobre impedimentos y desafíos</li>
+                    <li>Responsabilidad compartida por la calidad del producto</li>
+                    <li>Participación activa en todas las ceremonias Scrum</li>
+                </ul>
+            </div>
+
+            <div class="value-card">
+                <h3>Enfoque</h3>
+                <p>Concentración en las tareas del Sprint actual y los objetivos establecidos, evitando distracciones.</p>
+                <p>Manifestación en el proyecto:</p>
+                <ul>
+                    <li>Protección del equipo frente a interrupciones externas</li>
+                    <li>Priorización rigurosa de historias de usuario</li>
+                    <li>Minimización del trabajo en progreso (WIP)</li>
+                    <li>Daily Scrums centrados en el objetivo del Sprint</li>
+                </ul>
+            </div>
+
+            <div class="value-card">
+                <h3>Apertura</h3>
+                <p>Transparencia sobre el trabajo, los desafíos, el progreso y los aprendizajes con todos los interesados.</p>
+                <p>Manifestación en el proyecto:</p>
+                <ul>
+                    <li>Tablero Scrum visible para todo el equipo y stakeholders</li>
+                    <li>Comunicación honesta sobre problemas y riesgos</li>
+                    <li>Demostraciones abiertas a todos los interesados</li>
+                    <li>Compartición de aprendizajes y mejores prácticas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="values-container">
+            <div class="value-card">
+                <h3>Respeto</h3>
+                <p>Reconocimiento de las diversas habilidades, experiencias y perspectivas de todos los miembros del equipo.</p>
+                <p>Manifestación en el proyecto:</p>
+                <ul>
+                    <li>Escucha activa en todas las reuniones</li>
+                    <li>Valoración de opiniones independientemente del rol o experiencia</li>
+                    <li>Reconocimiento de contribuciones individuales</li>
+                    <li>Feedback constructivo durante revisiones de código</li>
+                </ul>
+            </div>
+
+            <div class="value-card">
+                <h3>Coraje</h3>
+                <p>Valentía para enfrentar problemas difíciles, tomar decisiones complejas y ser transparente sobre los desafíos.</p>
+                <p>Manifestación en el proyecto:</p>
+                <ul>
+                    <li>Confrontación constructiva de problemas técnicos y de proceso</li>
+                    <li>Experimentación con nuevas soluciones</li>
+                    <li>Reconocimiento de errores y aprendizaje de ellos</li>
+                    <li>Defensa de la calidad frente a presiones de tiempo</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Roles en el Equipo Scrum</h2>
+        <p>Se implementaron los tres roles fundamentales de Scrum, cada uno con responsabilidades específicas:</p>
+
+        <div class="roles-container">
+            <div class="role-card">
+                <h4>Product Owner</h4>
+                <p><strong>Responsabilidades:</strong> Definir la visión del producto, priorizar el backlog, representar los intereses del cliente, aceptar o rechazar los entregables.</p>
+                <p><strong>En NovaTech:</strong> Ana García, gerente de producto con experiencia en comercio electrónico y amplio conocimiento del negocio de moda.</p>
+                <p><strong>Actividades clave:</strong></p>
+                <ul>
+                    <li>Reuniones semanales con representantes de Fashionista</li>
+                    <li>Refinamiento continuo del Product Backlog</li>
+                    <li>Definición clara de criterios de aceptación</li>
+                    <li>Toma de decisiones sobre el alcance y las prioridades</li>
+                </ul>
+            </div>
+
+            <div class="role-card">
+                <h4>Scrum Master</h4>
+                <p><strong>Responsabilidades:</strong> Facilitar el proceso Scrum, eliminar impedimentos, proteger al equipo, promover las mejores prácticas ágiles.</p>
+                <p><strong>En NovaTech:</strong> Carlos Martínez, desarrollador senior con certificación como Scrum Master y experiencia previa en transformación ágil.</p>
+                <p><strong>Actividades clave:</strong></p>
+                <ul>
+                    <li>Facilitación de todas las ceremonias Scrum</li>
+                    <li>Coaching al equipo en prácticas ágiles</li>
+                    <li>Resolución proactiva de impedimentos</li>
+                    <li>Protección del equipo frente a interrupciones externas</li>
+                    <li>Promoción de la mejora continua</li>
+                </ul>
+            </div>
+
+            <div class="role-card">
+                <h4>Equipo de Desarrollo</h4>
+                <p><strong>Responsabilidades:</strong> Diseñar, construir y probar incrementos del producto, auto-organizarse para cumplir los objetivos del Sprint.</p>
+                <p><strong>En NovaTech:</strong> Equipo multidisciplinario de 7 personas con diversas habilidades y niveles de experiencia.</p>
+                <p><strong>Composición del equipo:</strong></p>
+                <ul>
+                    <li>2 desarrolladores frontend (React)</li>
+                    <li>2 desarrolladores backend (Node.js)</li>
+                    <li>1 especialista en bases de datos</li>
+                    <li>1 diseñador UX/UI</li>
+                    <li>1 tester de calidad</li>
+                </ul>
+                <p><strong>Enfoque:</strong> Auto-organización, propiedad colectiva del código, colaboración continua.</p>
+            </div>
+        </div>
+
+        <h2>Eventos de Scrum Implementados</h2>
+        <p>El equipo implementó los cinco eventos formales de Scrum para estructurar el proceso:</p>
+
+        <div class="events-container">
+            <div class="event-card">
+                <div class="event-header">
+                    <div class="event-icon">🗓️</div>
+                    <div class="event-title">Sprint Planning</div>
+                    <div class="event-duration">4 horas</div>
+                </div>
+                <p>Reunión al inicio de cada Sprint donde el equipo seleccionaba las historias de usuario del Product Backlog y planificaba cómo implementarlas.</p>
+                <h4>Implementación en NovaTech:</h4>
+                <ul>
+                    <li>Sprints de 2 semanas de duración</li>
+                    <li>Formato de dos partes: "Qué haremos" y "Cómo lo haremos"</li>
+                    <li>Estimación de historias utilizando Planning Poker con puntos de historia</li>
+                    <li>Definición clara del Objetivo del Sprint</li>
+                    <li>Creación colaborativa de un plan detallado</li>
+                </ul>
+                <h4>Herramientas utilizadas:</h4>
+                <ul>
+                    <li>Jira para gestión del backlog y planificación</li>
+                    <li>Miro para sesiones de estimación colaborativa remota</li>
+                    <li>Plantilla de objetivo de Sprint compartida</li>
+                </ul>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <div class="event-icon">☀️</div>
+                    <div class="event-title">Daily Scrum</div>
+                    <div class="event-duration">15 minutos</div>
+                </div>
+                <p>Reunión diaria donde el equipo de desarrollo sincronizaba actividades y creaba un plan para las próximas 24 horas.</p>
+                <h4>Implementación en NovaTech:</h4>
+                <ul>
+                    <li>Realizada cada día a las 9:30 am</li>
+                    <li>Formato stand-up frente al tablero Scrum</li>
+                    <li>Cada miembro respondía: ¿Qué hice ayer? ¿Qué haré hoy? ¿Tengo algún impedimento?</li>
+                    <li>Enfoque en el objetivo del Sprint, no en reportes de estado</li>
+                    <li>Discusiones técnicas detalladas derivadas a reuniones posteriores</li>
+                </ul>
+                <h4>Beneficios observados:</h4>
+                <ul>
+                    <li>Identificación temprana de impedimentos</li>
+                    <li>Colaboración mejorada entre miembros del equipo</li>
+                    <li>Mayor transparencia sobre el progreso y desafíos</li>
+                    <li>Adaptación diaria del plan de implementación</li>
+                </ul>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <div class="event-icon">🔍</div>
+                    <div class="event-title">Sprint Review</div>
+                    <div class="event-duration">2 horas</div>
+                </div>
+                <p>Reunión al final del Sprint donde el equipo presentaba el incremento completado a los stakeholders para obtener feedback.</p>
+                <h4>Implementación en NovaTech:</h4>
+                <ul>
+                    <li>Demostración de funcionamiento real (no presentaciones)</li>
+                    <li>Participación de representantes de Fashionista</li>
+                    <li>Feedback directo registrado en el momento</li>
+                    <li>Revisión del backlog del producto a la luz del progreso</li>
+                    <li>Formato informal y colaborativo</li>
+                </ul>
+                <h4>Estructura típica:</h4>
+                <ul>
+                    <li>Recordatorio del objetivo del Sprint (5 min)</li>
+                    <li>Demostración de funcionalidades por el equipo (60 min)</li>
+                    <li>Preguntas y feedback de stakeholders (30 min)</li>
+                    <li>Actualización de próximos pasos y prioridades (25 min)</li>
+                </ul>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <div class="event-icon">🔄</div>
+                    <div class="event-title">Sprint Retrospective</div>
+                    <div class="event-duration">1.5 horas</div>
+                </div>
+                <p>Reunión para analizar qué funcionó bien, qué podría mejorarse y crear un plan de acción para implementar mejoras.</p>
+                <h4>Implementación en NovaTech:</h4>
+                <ul>
+                    <li>Realizada inmediatamente después de cada Sprint Review</li>
+                    <li>Participación de todo el equipo Scrum</li>
+                    <li>Utilización de distintas técnicas de retrospectiva (Starfish, 4Ls, Mad-Sad-Glad)</li>
+                    <li>Enfoque en acciones concretas de mejora</li>
+
+                </ul>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container">
+              <div class="footer-content">
+                  <p>&copy; 2025 YMR</p>
+                  <p>Caso de estudio educativo sobre metodologías de desarrollo</p>
+              </div>
+            </div>
+          </footer>
+        </body>
+      </html>
+      
