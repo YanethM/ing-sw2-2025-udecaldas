@@ -15,6 +15,13 @@ const signUp = async (req, res) => {
       message: "All required fields: fullname, email and password",
     });
   }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      message: "Invalid email format",
+    });
+  }
 };
 
 const signIn = async (req, res) => {};
