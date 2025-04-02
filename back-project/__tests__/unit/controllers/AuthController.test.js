@@ -27,6 +27,11 @@ jest.mock("jsonwebtoken", () => ({
   sign: jest.fn().mockReturnValue("test_token"),
 }));
 
+// Mockear sendVerificationEmail para enviar correos
+jest.mock('../../../src/utils/email', () => ({
+  sendVerificationEmail: jest.fn().mockResolvedValue(true),
+}));
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { signUp, signIn } = require("../../../src/controllers/AuthController");
@@ -84,7 +89,7 @@ describe("SignUp Controller Method", () => {
     await signUp(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Password must be at least 6 characteres long",
+      message: "Password must be at least 6 characters long",
     });
   });
 
@@ -298,7 +303,7 @@ describe("SignIn Controller Method", () => {
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: error,
+      message: "Login failed",
     });
   });
 });

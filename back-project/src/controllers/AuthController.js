@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
@@ -88,7 +88,7 @@ const signUp = async (req, res) => {
     // El usuario ya existe
     if (existinguser) {
       return res.status(400).json({
-        message: "Email already registered",
+        message: "Email allready registered",
       });
     }
 

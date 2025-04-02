@@ -6,7 +6,8 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "test": "jest --coverage",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "migrate": "prisma migrate dev"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,9 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
